@@ -1,0 +1,44 @@
+﻿@page "/movies"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject Movies.Data.MoviesContext _DB
+@using Movies
+@rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using Movies.Data
+
+<PageTitle>Movies | CRUD</PageTitle>
+
+<h1>Movies</h1>
+
+<p>
+    <a href="movies/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="FilteredMovies" Pagination="paginationState">
+    <PropertyColumn Property="movie => movie.Title" Sortable="true">
+        <ColumnOptions>
+            <div>
+                <input type="search" autofocus @bind="titleFilter" @bind:event="oninput"/>
+            </div>
+        </ColumnOptions>
+    </PropertyColumn>
+    <PropertyColumn Property="movie => movie.ReleaseDate" Title="Release Date"/>
+    <PropertyColumn Property="movie => movie.Genre" />
+    <PropertyColumn Property="movie => movie.Price" Sortable="true"/>
+
+    <TemplateColumn Context="movie">
+        <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
+        <a href="@($"movies/details?id={movie.Id}")">Details</a> |
+        <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+<Paginator State="paginationState"/>
+
+@code {
+    PaginationState paginationState = new() { ItemsPerPage = 10 };
+    string titleFilter = string.Empty;
+    IQueryable<Movie> FilteredMovies => _DB.Movie.Where(movie => movie.Title!.Contains(titleFilter));
+}

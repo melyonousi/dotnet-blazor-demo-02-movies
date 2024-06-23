@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "watch": "npx tailwindcss -i wwwroot/css/tailwindcss.css -o wwwroot/css/tailwindcss.min.css --watch"
+  },
+  "devDependencies": {
+    "eslint": "^9.4.0",
+    "tailwindcss": "^3.4.4"
+  }
+}

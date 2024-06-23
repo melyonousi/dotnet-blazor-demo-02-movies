@@ -1,0 +1,19 @@
+﻿@page "/"
+@inject DialogState _dialogState
+
+<PageTitle>Movies | Home</PageTitle>
+
+<h1 class="text-red-500">Hello, world! test</h1>
+
+Welcome to your new app.
+
+<button @onclick="ShowDialog">Show Dialog</button>
+
+<Movies.Components.Shared.DialogComponent />
+
+@code {
+    private void ShowDialog()
+    {
+        _dialogState.ShowDialog();
+    }
+}

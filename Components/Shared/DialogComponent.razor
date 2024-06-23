@@ -1,0 +1,50 @@
+﻿<!-- DialogComponent.razor -->
+@inject DialogState _dialogState
+@inject IJSRuntime jsRuntime
+
+<dialog @ref="dialogRef">
+    <p>I'm a dialog</p>
+    <button @onclick="CloseDialog">Close</button>
+</dialog>
+
+@code {
+    private ElementReference dialogRef;
+
+    protected override void OnInitialized()
+    {
+        _dialogState.OnChange += StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_dialogState.IsDialogOpen)
+            {
+                await jsRuntime.InvokeVoidAsync("openDialog", dialogRef);
+            }
+        }
+        else
+        {
+            if (_dialogState.IsDialogOpen)
+            {
+                await jsRuntime.InvokeVoidAsync("openDialog", dialogRef);
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("closeDialog", dialogRef);
+            }
+        }
+    }
+
+    private async Task CloseDialog()
+    {
+        _dialogState.CloseDialog();
+        await jsRuntime.InvokeVoidAsync("closeDialog", dialogRef);
+    }
+
+    public void Dispose()
+    {
+        _dialogState.OnChange -= StateHasChanged;
+    }
+}
